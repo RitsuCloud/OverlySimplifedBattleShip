@@ -148,9 +148,4 @@ public class ShipBoard{
    public int getGuess(){
       return guess;
    }
-   
-   //Post: return true if all the ships been hit
-   public boolean getShips(){
-      return storage.isEmpty();
-   }
 }
