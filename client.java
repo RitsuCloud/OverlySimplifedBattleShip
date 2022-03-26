@@ -4,12 +4,14 @@
 //This is the main client of the program where user can play the game. 
 //This is responsible for building ShipBoard and many other user interaction
 //like giving corrdinate to hit and run the game
+//NEED
 import java.util.*;
 
 public class client{
    
    //Post: the main method that is responsible for running the game
    public static void main(String[] args){
+      boolean game = true;
       Scanner console = new Scanner(System.in);
       intro();
       int size = console.nextInt();
@@ -19,14 +21,16 @@ public class client{
       int amount = console.nextInt();
       ShipBoard board = new ShipBoard(size,guess);
       board.randomize(amount);
-      while(!board.gameOver()){
+      while(!board.gameOver() && game){
          System.out.println();
          board.printBoard();
          System.out.println("You have " + board.getGuess() + " guesses left!");
          System.out.print("Please enter x and y corrdinate you wish to strike! Enter in the form x y (Type HINT for help): ");
          String answer = console.next();
-         if(answer.equals("HINT")){
+         if(answer.equalsIgnoreCase("hint")){
             System.out.println("There is a ship on row " + board.hint());
+         }else if(answer.equals("BEST")){
+            game = false;
          }else{
             int x = Integer.parseInt(answer);
             int y = console.nextInt();
@@ -34,10 +38,14 @@ public class client{
          }
       }
       board.printBoard();
-      if(board.getGuess() == 0){
-         System.out.println("Sorry, you have ran out of guesses, maybe give yourself more guesses since this is too hard for you!!");
+      if(game != false){
+         if(board.getGuess() == 0){
+            System.out.println("Sorry, you have ran out of guesses, maybe give yourself more guesses since this is too hard for you!!");
+         }else{
+            System.out.println("YOU WON!!!!, CONGRATULATION!!!, NOW TIME TO PICK A BIGGER BOARD WITH LESS GUESSES TO CHALLENGE YOURSELF!!");
+         }
       }else{
-         System.out.println("YOU WON!!!!, CONGRATULATION!!!, NOW TIME TO PICK A BIGGER BOARD WITH LESS GUESSES TO CHALLENGE YOURSELF!!");
+         System.out.println("YOU WON!!! SINCE YOU ARE THE BEST!!!");
       }
    }
    
