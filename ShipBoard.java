@@ -7,8 +7,7 @@
 //Counts from top to bottom. left to right, so top left corner is (0, 0)
 //----------------------------------------------------------
 //Needs:
-//add method for randomize adding ships
-//add method for get number of ships left
+//FIX randomize
 
 import java.util.*;
 
@@ -91,15 +90,30 @@ public class ShipBoard{
          List<Integer> tempt = board.get(x);
          List<Integer> tempt2 = storage.get(x);
          if(tempt2.contains(y)){  //if there is a ship on the spot
+            int i = tempt2.indexOf(y);
+            tempt2.remove(i);
+            if(tempt2.isEmpty()){
+               storage.remove(x);
+            }
             tempt.set(y, -10);
          }else{
-            tempt.set(y, 10);
-            guess--;  //guess -1 since they didnt get anything
+            if(tempt.get(y) != 0){
+               System.out.println("You have already striked this spot");
+               guess--;
+            }else{
+               tempt.set(y, 10);
+               guess--;   //guess -1 since they didnt get anything
+            }
          }
       }else{
          List<Integer> tempt = board.get(x);  //when there is no ship on the row
-         tempt.set(y, 10);
-         guess--;   //guess -1 since they didnt get anything
+         if(tempt.get(y) != 0){
+            System.out.println("You have already striked this spot");
+            guess--;
+         }else{
+            tempt.set(y, 10);
+            guess--;   //guess -1 since they didnt get anything
+         }
       }
    }
    
@@ -121,7 +135,11 @@ public class ShipBoard{
                tempt = storage.get(x);
             }
             while(tempt.contains(y)){
-               y = rand.nextInt(size);
+               if(y < size -1){
+                  y = y + 1;
+               }else{
+                  y = y - 1;
+               }
             }
             tempt.add(y);
          }else{
@@ -135,8 +153,14 @@ public class ShipBoard{
    //Post: method returns the row where it contains 1 or more ships
    public int hint(){
       Set<Integer> keySet = storage.keySet();
-      Iterator<Integer> i = keySet.iterator();
-      return i.next();
+      int i = 0;
+      for(int n: keySet){
+         List<Integer> l = storage.get(n);
+         if(!l.isEmpty()){
+            i = n;
+         }
+      }
+      return i;
    }
    //Post: this method returns true when the user has run out of guesses
    //or they hit all the ships
@@ -147,5 +171,10 @@ public class ShipBoard{
    //Post: returns the number of guess left
    public int getGuess(){
       return guess;
+   }
+   
+   //Post: return true if all the ships been hit
+   public boolean getShips(){
+      return storage.isEmpty();
    }
 }
